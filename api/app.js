@@ -2,6 +2,8 @@ const express = require('express')
 const path = require('path')
 require('express-async-errors')
 const cors = require('cors')
+const userRouter = require('./controllers/user')
+const loginRouter = require('./controllers/login')
 
 const app = express()
 
@@ -21,5 +23,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 app.use('/', express.static(path.join(__dirname, 'dist')))
-
+app.use('/api/user', userRouter)
+app.use('/api/login', loginRouter)
 module.exports = app
