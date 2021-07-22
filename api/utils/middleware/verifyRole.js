@@ -1,8 +1,10 @@
 const { USER_ROLE } = require('../USER_ROLE')
 
 const verifyRole = (req, res, next) => {
-  if ((req.role = USER_ROLE.USER)) {
-    return res.status(401).json({ error: 'dont role authorization' })
+  const { role } = req
+
+  if (!(role === USER_ROLE.ADMIN || role === USER_ROLE.MODERATOR)) {
+    return res.status(401).json({ error: 'dont authorization' })
   }
 
   next()

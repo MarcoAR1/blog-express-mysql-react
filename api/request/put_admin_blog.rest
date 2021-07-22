@@ -1,0 +1,8 @@
+PUT http://localhost:3001/api/blog/admin/2
+Content-Type:  application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcmNvNTQ2NTQiLCJuYW1lIjoiTWFyY28gQW50b25pbyBSaXZlcm8iLCJlbWFpbCI6Im1hcmNvNTY0QGdtYWlsLmNvbSIsInVzZXJfaWQiOjEsInJvbGUiOiJhZG1pbiIsImF1dGhvcm5hbWUiOiJNYXJjb0FSIiwiaWF0IjoxNjI2OTYyMTI2LCJleHAiOjE2MjgyNTgxMjZ9.JUgALASddmpeJ1IS6d_B48ZFdh4fZzfp_PFsG5_wJes
+
+{
+ "title":"titulo de practicaa",
+ "contentText":"hola que hace caaarack maquina bestia parda esto es trmendo haha xD omaga lul"
+}

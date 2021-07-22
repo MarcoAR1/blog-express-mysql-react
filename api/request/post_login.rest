@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/login/
+Content-Type:  application/json
+
+{
+ "username":"Marco54654",
+ "password":"44444444",
+ "email":"marco564@gmail.com",
+ "name":"Marco Antonio Rivero",
+ "authorname":"MarcoAR"
+}

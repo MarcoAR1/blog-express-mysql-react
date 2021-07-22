@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/user/
+Content-Type:  application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcmNvNTQ2NTQiLCJuYW1lIjoiTWFyY28gQW50b25pbyBSaXZlcm8iLCJlbWFpbCI6Im1hcmNvNTY0QGdtYWlsLmNvbSIsInVzZXJfaWQiOjEsInJvbGUiOiJ1c2VyIiwiYXV0aG9ybmFtZSI6Ik1hcmNvQVIiLCJpYXQiOjE2MjY5NDg3NTIsImV4cCI6MTYyODI0NDc1Mn0.Nw6-gp2GlrsZVUI8clwCvieQEVTzrwGeZ5o0JkWL3vo
+
+{
+ "password":"44444444"
+}

@@ -8,7 +8,6 @@ loginRouter.post('/', async (req, res) => {
   const { username = '', password = '' } = req.body
   const getUser = await new User({ username }).getUserLogin()
   const CurrentUser = getUser.find((user) => user.username === username)
-
   if (!CurrentUser)
     return res.status(401).json({ message: 'Pasword or username incorrect.' })
   if (!(username === CurrentUser.username))
@@ -21,6 +20,7 @@ loginRouter.post('/', async (req, res) => {
     email: CurrentUser.email,
     user_id: CurrentUser.user_id,
     role: CurrentUser.role,
+    authorname: CurrentUser.authorname,
   }
   const token = jwt.sign(tokenUser, SING, { expiresIn: 60 * 60 * 24 * 15 })
 
@@ -29,6 +29,7 @@ loginRouter.post('/', async (req, res) => {
     name: CurrentUser.name,
     email: CurrentUser.email,
     role: CurrentUser.role,
+    authorname: CurrentUser.authorname,
     token,
   })
 })

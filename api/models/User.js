@@ -2,13 +2,21 @@ const sql = require('../dbmysql')
 
 class User {
   constructor(
-    { username = '', password = '', email = '', name = '', role = '' } = ''
+    {
+      username = '',
+      password = '',
+      email = '',
+      name = '',
+      role = '',
+      authorname = '',
+    } = ''
   ) {
     this.username = username
     this.password = password
     this.email = email
     this.name = name.trim().replace(/\s+/, ' ')
     this.role = role
+    this.authorname = authorname
   }
 
   async Create() {
@@ -17,7 +25,7 @@ class User {
     }
 
     const result = await sql.promise().query(`INSERT INTO User SET ?`, [this])
-    sql.end
+
     return result
   }
 
@@ -25,16 +33,16 @@ class User {
     const result = await sql
       .promise()
       .query(`SELECT * FROM User WHERE user_id = ?`, [user_id])
-    sql.end
-    return result[0]
+
+    return result[0][0]
   }
 
   async getUserLogin() {
     const result = await sql
       .promise()
       .query(`SELECT * FROM User WHERE username = ?`, [this.username])
-    sql.end
-    return result[0]
+
+    return result[0][0]
   }
 
   async deleteUser(username, email, user_id) {
@@ -44,7 +52,7 @@ class User {
         `DELETE FROM User WHERE username = ? AND email = ? AND user_id = ?`,
         [username, email, user_id]
       )
-    sql.end
+
     return result
   }
 
@@ -56,7 +64,7 @@ class User {
         this.username,
         user_id,
       ])
-    sql.end
+
     return result[0]
   }
 
@@ -64,7 +72,7 @@ class User {
     const result = await sql
       .promise()
       .query('UPDATE User SET ? WHERE user_id = ?', [data, user_id])
-    sql.end
+
     return result[0]
   }
 
@@ -91,6 +99,10 @@ class User {
       this.name.length > 20 ||
       !this.name.match(/^[a-zA-Z\s]+$/)
     ) {
+      return false
+    }
+
+    if (this.authorname.length < 3 || this.authorname.length > 20) {
       return false
     }
 

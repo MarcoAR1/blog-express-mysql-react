@@ -5,43 +5,46 @@ const verifyRole = require('../utils/middleware/verifyRole.js')
 const verifyToken = require('../utils/middleware/verifyToken.js')
 const { USER_ROLE } = require('../utils/USER_ROLE.js')
 
-userRouter.put('/role/:role/:id', verifyToken, verifyRole, async (req, res) => {
+userRouter.put('/admin/:id', verifyToken, verifyRole, async (req, res) => {
   const { user_id } = req
   const roleRef = req.role
-  const { id, role } = req.params
-  const userRef = await User().getUser(user_id)
-  if (!userRef.role === roleRef) {
+
+  if (roleRef === USER_ROLE.MODERATOR)
     return res
       .status(401)
       .json({ message: "You are not allowed to change this user's role" })
-  }
 
-  if (
-    roleRef === USER_ROLE.ADMIN &&
-    (role === USER_ROLE.ADMIN ||
-      role === USER_ROLE.MODERATOR ||
-      role === USER_ROLE.USER)
-  ) {
-    const updateUser = await new User().updateUserRole({ role: role }, id)
-    if (updateUser.affectedRows) {
-      return res.status(200).json({ message: 'User updated successfully' })
-    }
-    res.status(400).json({ message: 'User dont possible to update' })
-  }
-  if (
-    roleRef === USER_ROLE.MODERATOR &&
-    (role === USER_ROLE.MODERATOR || role === USER_ROLE.USER)
-  ) {
-    const updateUser = await new User().updateUserRole({ role: role }, id)
-    if (updateUser.affectedRows) {
-      return res.status(200).json({ message: 'User updated successfully' })
-    }
-    res.status(400).json({ message: 'User dont possible to update' })
-  }
+  const { id } = req.params
+  const { role } = req.body
+
+  const newRole =
+    role && USER_ROLE[role.toUpperCase()] ? USER_ROLE[role.toUpperCase()] : null
+
+  if (!newRole) return res.status(400).json({ message: 'Role is required' })
+
+  const userRef = await new User().getUser(user_id)
+
+  if (userRef && !(userRef.role === roleRef))
+    return res
+      .status(401)
+      .json({ message: "You are not allowed to change this user's role" })
+
+  const updateUser = await new User().updateUserRole({ role: newRole }, id)
+
+  if (updateUser.affectedRows)
+    return res.status(200).json({ message: 'User updated successfully' })
+
+  res.status(400).json({ message: 'User dont possible to update' })
 })
 
 userRouter.post('/', async (req, res) => {
-  let { username = '', password = '', name = '', email = '' } = req.body
+  let {
+    username = '',
+    password = '',
+    name = '',
+    email = '',
+    authorname = '',
+  } = req.body
 
   password = await bcrypt.hash(password, 10)
   const newUser = await new User({
@@ -50,6 +53,7 @@ userRouter.post('/', async (req, res) => {
     name,
     email,
     role: USER_ROLE.USER,
+    authorname,
   }).Create()
 
   if (newUser.message) {

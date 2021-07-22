@@ -1,0 +1,7 @@
+PUT http://localhost:3001/api/user/admin/1
+Content-Type:  application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Ik1hcmNvNTQ2NTQiLCJuYW1lIjoiTWFyY28gQW50b25pbyBSaXZlcm8iLCJlbWFpbCI6Im1hcmNvNTY0QGdtYWlsLmNvbSIsInVzZXJfaWQiOjEsInJvbGUiOiJhZG1pbiIsImF1dGhvcm5hbWUiOiJNYXJjb0FSIiwiaWF0IjoxNjI2OTYyMTI2LCJleHAiOjE2MjgyNTgxMjZ9.JUgALASddmpeJ1IS6d_B48ZFdh4fZzfp_PFsG5_wJes
+
+{
+ "role":"admin"
+}
