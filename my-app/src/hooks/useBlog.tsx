@@ -11,7 +11,7 @@ interface BlogHook {
     handleGetLengthBlog: () => Promise<number | { message: string }>
 }
 
-interface getBlogPageProps {
+export interface getBlogPageProps {
     page: number
     filter: string
     order: string

@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useLocation } from "wouter"
+import { IuseHandlePaginationProps, IuseHandlePaginationState } from '../components/Interface'
 
 
-
-const useHandlePagination = ({ params, getBlogPage, handleGetLengthBlog }) => {
+const useHandlePagination = ({ params, getBlogPage, handleGetLengthBlog }: IuseHandlePaginationProps): IuseHandlePaginationState => {
     const [location, setLocation] = useLocation()
     const [currentPage, setCurrentPage] = useState(params.page ? +params.page : 1)
     const [slice, setSlice] = useState({ last: null })
     const [count, setCount] = useState(1)
 
-    const handlePaginationChange = (_, page) => {
+    const handlePaginationChange = (page: number): void => {
         if (page === currentPage) return
 
-        setLocation(page)
+        setLocation(`/${page}/`)
         if (slice[page]) {
             setCurrentPage(page)
             return
