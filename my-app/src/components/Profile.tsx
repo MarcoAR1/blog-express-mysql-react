@@ -1,11 +1,7 @@
-import React from 'react'
+import React from 'react';
 
-const Profile = (): JSX.Element => {
-    return (
-        <div>
+const Profile = (): JSX.Element => (
+  <div />
+);
 
-        </div>
-    )
-}
-
-export default Profile
+export default Profile;
