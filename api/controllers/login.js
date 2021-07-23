@@ -21,6 +21,7 @@ loginRouter.post('/', async (req, res) => {
     user_id: CurrentUser.user_id,
     role: CurrentUser.role,
     authorname: CurrentUser.authorname,
+    avatar: CurrentUser.avatar,
   }
   const token = jwt.sign(tokenUser, SING, { expiresIn: 60 * 60 * 24 * 15 })
 
@@ -30,6 +31,7 @@ loginRouter.post('/', async (req, res) => {
     email: CurrentUser.email,
     role: CurrentUser.role,
     authorname: CurrentUser.authorname,
+    avatar: CurrentUser.avatar,
     token,
   })
 })

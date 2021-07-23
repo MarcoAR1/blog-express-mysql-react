@@ -18,11 +18,10 @@ const Home = ({ params }: Props): JSX.Element => {
     } = useHandlePagination({ params: typeof params.page === 'number' ? { page: +params.page } : { page: 1 }, getBlogPage, handleGetLengthBlog });
 
     return (
-        <div>
+        <div style={{width:1400, height:900}}>
             {!!Blogs.blogs.length && (
                 <div className={classes.homeContainer}>
                     <h1>Blog</h1>
-                    <p>Hello I m a Home </p>
                     <div className={classes.homeContainerBlogs}>
                         {slice[currentPage] && Blogs.blogs.slice(...slice[currentPage]).map(({
                             title, contentText, blog_id, img,
