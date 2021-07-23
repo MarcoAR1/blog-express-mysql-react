@@ -1,0 +1,16 @@
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    176deg,
+    rgba(0, 212, 255, 1) 0%,
+    rgb(141, 141, 170) 35%,
+    rgb(38, 37, 48) 100%
+  );
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}

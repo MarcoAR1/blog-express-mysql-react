@@ -5,6 +5,9 @@ const verifyRole = require('../utils/middleware/verifyRole.js')
 const verifyToken = require('../utils/middleware/verifyToken.js')
 const { USER_ROLE } = require('../utils/USER_ROLE.js')
 
+const DEFAULT_USER_AVATAR =
+  'https://lh3.googleusercontent.com/proxy/KXBmFJZc7E4wOroWBAS9yS1E2C7HloPuXxAa2dLvMwUFT1lcokrW9-b2eER0Rs0NLEwH1gyC_VP_P0qULCI9O2K7UgWsYoEcwpQ'
+
 userRouter.put('/admin/:id', verifyToken, verifyRole, async (req, res) => {
   const { user_id } = req
   const roleRef = req.role
@@ -44,6 +47,7 @@ userRouter.post('/', async (req, res) => {
     name = '',
     email = '',
     authorname = '',
+    avatar = DEFAULT_USER_AVATAR,
   } = req.body
 
   password = await bcrypt.hash(password, 10)
@@ -54,6 +58,7 @@ userRouter.post('/', async (req, res) => {
     email,
     role: USER_ROLE.USER,
     authorname,
+    avatar,
   }).Create()
 
   if (newUser.message) {

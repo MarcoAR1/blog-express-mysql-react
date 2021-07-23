@@ -9,6 +9,7 @@ class User {
       name = '',
       role = '',
       authorname = '',
+      avatar = '',
     } = ''
   ) {
     this.username = username
@@ -17,6 +18,7 @@ class User {
     this.name = name.trim().replace(/\s+/, ' ')
     this.role = role
     this.authorname = authorname
+    this.avatar = avatar
   }
 
   async Create() {
@@ -42,7 +44,7 @@ class User {
       .promise()
       .query(`SELECT * FROM User WHERE username = ?`, [this.username])
 
-    return result[0][0]
+    return result[0]
   }
 
   async deleteUser(username, email, user_id) {
@@ -103,6 +105,10 @@ class User {
     }
 
     if (this.authorname.length < 3 || this.authorname.length > 20) {
+      return false
+    }
+
+    if (this.avatar.length < 3) {
       return false
     }
 

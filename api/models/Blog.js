@@ -1,10 +1,11 @@
 const sql = require('../dbmysql.js')
 
 class Blog {
-  constructor({ user_id = '', contentText = '', title = '' } = '') {
+  constructor({ user_id = '', contentText = '', title = '', img = '' } = '') {
     this.user_id = user_id
     this.contentText = contentText
     this.title = title
+    this.img = img
     this.createdAt = new Date().toISOString()
   }
 
@@ -38,7 +39,9 @@ class Blog {
     const result = await sql
       .promise()
       .query(
-        'SELECT * FROM Blog ORDER BY ?? ' + DESCORASC + ' LIMIT ? OFFSET ? ',
+        'SELECT Blog.blog_id , Blog.contentText , Blog.createdAt, Blog.title, Blog.updatedAt, Blog.img, User.authorname, User.avatar FROM Blog inner join User on Blog.user_id = User.user_id ORDER BY ?? ' +
+          DESCORASC +
+          ' LIMIT ? OFFSET ? ',
         [BLOGORDER, BLOGLIMIT, OFFSET]
       )
     return result[0]
@@ -79,8 +82,22 @@ class Blog {
     const result = await sql
       .promise()
       .query('DELETE FROM Blog WHERE blog_id = ?', [id])
-
     return result[0]
+  }
+
+  async UpdateLengthBlog(type) {
+    const result = await sql
+      .promise()
+      .query(
+        'Update blog_info set blog_info.length = blog_info.length + ? where blog_info.blog_id = 1',
+        [type === 'ADD' ? 1 : -1]
+      )
+    return result[0]
+  }
+
+  async getAmountBlogs() {
+    const result = await sql.promise().query('SELECT length FROM blog_info')
+    return result[0][0]
   }
 
   validateContentBlog() {

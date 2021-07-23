@@ -5,6 +5,7 @@ const cors = require('cors')
 const userRouter = require('./controllers/user')
 const loginRouter = require('./controllers/login')
 const blogRouter = require('./controllers/blog')
+const { handleError } = require('./utils/middleware/handleError')
 
 const app = express()
 
@@ -23,8 +24,12 @@ if (process.env.NODE_ENV === 'development') {
   })
 }
 
-app.use('/', express.static(path.join(__dirname, 'dist')))
 app.use('/api/user', userRouter)
 app.use('/api/login', loginRouter)
 app.use('/api/blog', blogRouter)
+app.use('/', express.static(path.join(__dirname, 'dist')))
+app.use('/:page', express.static(path.join(__dirname, 'dist')))
+
+app.use(handleError)
+
 module.exports = app

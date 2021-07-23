@@ -1,1 +1,1 @@
-GET http://localhost:3001/api/blog/title/desc/
+GET http://localhost:3001/api/blog/updateAt/desc/0

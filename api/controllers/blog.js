@@ -4,35 +4,20 @@ const User = require('../models/User.js')
 const verifyRole = require('../utils/middleware/verifyRole.js')
 const verifyToken = require('../utils/middleware/verifyToken.js')
 
-const BLOG_GET_LIMIT = 10
+const BLOG_GET_LIMIT = 9
 const BLOG_SORT_OPTIONS = {
   UPDATEAT: 'updatedAt',
   TITLE: 'title',
   CREATEDAT: 'createdAt',
 }
+const BLOG_STATUS_OPTIONS = {
+  CREATED: 'ADD',
+  DELETE: 'SUB',
+}
 
-blogRouter.put('/admin/:id', verifyToken, verifyRole, async (req, res) => {
-  const { id } = req.params
-  const user_id = req.user_id
-  const { role } = req
-
-  const userRef = await new User().getUser(user_id)
-
-  if (userRef && !(userRef.role === role))
-    return res
-      .status(401)
-      .json({ message: 'You are not allowed to change this blogs' })
-
-  const data = {}
-  for (let x in req.body) {
-    data[x] = req.body[x]
-  }
-  const updateBlog = await new Blog().updateBlogAdmin(data, id)
-
-  if (!!updateBlog.affectedRows)
-    return res.status(200).json({ message: 'Blog updated successfully' })
-
-  res.status(400).json({ message: 'Blog not updated' })
+blogRouter.get('/length', async (req, res) => {
+  const length = await new Blog().getAmountBlogs()
+  res.status(202).json(length)
 })
 
 blogRouter.get('/:sort?/:directionsort?/:page?', async (req, res) => {
@@ -67,6 +52,30 @@ blogRouter.get('/:id', async (req, res) => {
   res.status(200).json(getBlogById)
 })
 
+blogRouter.put('/admin/:id', verifyToken, verifyRole, async (req, res) => {
+  const { id } = req.params
+  const user_id = req.user_id
+  const { role } = req
+
+  const userRef = await new User().getUser(user_id)
+
+  if (userRef && !(userRef.role === role))
+    return res
+      .status(401)
+      .json({ message: 'You are not allowed to change this blogs' })
+
+  const data = {}
+  for (let x in req.body) {
+    data[x] = req.body[x]
+  }
+  const updateBlog = await new Blog().updateBlogAdmin(data, id)
+
+  if (updateBlog.affectedRows)
+    return res.status(200).json({ message: 'Blog updated successfully' })
+
+  res.status(400).json({ message: 'Blog not updated' })
+})
+
 blogRouter.put('/:id', verifyToken, async (req, res) => {
   const { id } = req.params
   const user_id = req.user_id
@@ -82,11 +91,12 @@ blogRouter.put('/:id', verifyToken, async (req, res) => {
 })
 
 blogRouter.post('/', verifyToken, async (req, res) => {
-  const { contentText = '', title = '' } = req.body
+  const { contentText = '', title = '', img = '' } = req.body
   const user_id = req.user_id
   const newBlog = await new Blog({
     contentText,
     title,
+    img,
     user_id,
   }).Create()
 
@@ -95,6 +105,7 @@ blogRouter.post('/', verifyToken, async (req, res) => {
   }
 
   if (newBlog.affectedRows) {
+    new Blog().UpdateLengthBlog(BLOG_STATUS_OPTIONS.CREATED)
     return res.status(201).json({
       message: 'Blog created successfully',
       id: newBlog.insertId,
@@ -117,9 +128,10 @@ blogRouter.delete('/admin/:id', verifyToken, verifyRole, async (req, res) => {
 
   const deleteBlog = await new Blog().deleteBlogAdmin(id)
 
-  if (!!deleteBlog.affectedRows)
+  if (deleteBlog.affectedRows) {
+    new Blog().UpdateLengthBlog(BLOG_STATUS_OPTIONS.DELETE)
     return res.status(200).json({ message: 'Blog deleted successfully' })
-
+  }
   res.status(400).json({ message: 'it not possible to delete' })
 })
 
@@ -127,7 +139,8 @@ blogRouter.delete('/:id', verifyToken, async (req, res) => {
   const { id } = req.params
   const user_id = req.user_id
   const deleteBlog = await new Blog().deleteBlog(id, user_id)
-  if (!!deleteBlog.affectedRows) {
+  if (deleteBlog.affectedRows) {
+    new Blog().UpdateLengthBlog(BLOG_STATUS_OPTIONS.DELETE)
     return res.status(200).json({ message: 'Blog deleted successfully' })
   }
   res.status(400).json({ message: 'it not possible to delete' })
